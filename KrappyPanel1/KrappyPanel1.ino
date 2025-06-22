@@ -21,9 +21,10 @@ bool setupMode = false;
  *  Constructing MPU-6050
  */
 
-Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
-  128, 0,                  // Button Count, Hat Switch Count
-  true, true, true,     // X and Y, but no Z Axis
+
+Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID+2,JOYSTICK_TYPE_MULTI_AXIS,
+  32, 0,                  // Button Count, Hat Switch Count
+  false, false, true,     // X and Y, but no Z Axis
   true, true, true,   // No Rx, Ry, or Rz
   false, false,          // No rudder or throttle
   false, false, false);  // No accelerator, brake, or steering
@@ -42,9 +43,9 @@ void setup() {
   pinMode(8,INPUT_PULLUP);
   pinMode(9,INPUT_PULLUP);
   pinMode(10,INPUT_PULLUP);
-  pinMode(15,INPUT_PULLUP);
-  pinMode(14,INPUT_PULLUP);
-  pinMode(16,INPUT_PULLUP);
+  pinMode(11,INPUT_PULLUP);
+  pinMode(12,INPUT_PULLUP);
+  pinMode(13,INPUT_PULLUP);
   
   Serial.println("started..");
   delay(1000);
@@ -186,19 +187,19 @@ long timehej;
 void mode1() {
   //CHJoystickButtonMatrix();
   // read 2 gear shifters
-  handleButton(2,0,false, shiftPulse);
-  handleButton(3,1,true, shiftPulse);
+  handleButton(2,0,false, shiftPulse); // modeswitch flip
+  handleButton(3,1,true, shiftPulse);  // normal button
 
-  handleButton(4,2,true, shiftPulse);
-  handleButton(5,3,false, shiftPulse);
-//  handleButton(4,4,false, shiftPulse);
-//  handleButton(5,5,false, shiftPulse);
-//  handleButton(6,6,false, shiftPulse);
-//  handleButton(7,7,false, shiftPulse);
-//  handleButton(8,8,false, shiftPulse);
-//  handleButton(9,9,false, shiftPulse);
-//  handleButton(10,10,false, shiftPulse);
-//  handleButton(15,15,false, shiftPulse);
+  handleButton(4,2,true, shiftPulse);// normal button
+  handleButton(5,3,false, shiftPulse); // modeswitch flip
+  handleButton(6,4,true, shiftPulse); // normal button 2 way spring
+  handleButton(7,5,true, shiftPulse); // normal button 2 way spring
+  handleButton(8,6,true, shiftPulse); // normal button 2 way spring
+  handleButton(9,7,true, shiftPulse); // normal button 2 way spring
+  handleButton(10,8,true, shiftPulse); // normal button 2 way spring
+  handleButton(11,9,true, shiftPulse); // normal button 2 way spring
+  handleButton(12,10,true, shiftPulse); // normal button 2 way spring
+  handleButton(13,11,true, shiftPulse); // normal button 2 way spring
 
   // read button matrix
  
@@ -222,12 +223,12 @@ void mode1() {
   a4 = (a4-512);
   //a1 = -a1;
   //a0 = -a0;
-  Joystick.setXAxis(a0);
-  Joystick.setYAxis(a1);
-  Joystick.setZAxis(a2);
-  Joystick.setRxAxis(a3);
-  Joystick.setRyAxis(0);
-  Joystick.setRzAxis(0);
+  Joystick.setXAxis(0);
+  Joystick.setYAxis(0);
+  Joystick.setZAxis(a3);
+  Joystick.setRxAxis(a2);
+  Joystick.setRyAxis(a1);
+  Joystick.setRzAxis(a0);
   // read multiwheel dial
 
   // send state
