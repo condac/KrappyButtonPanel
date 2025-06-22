@@ -91,6 +91,44 @@ void loop() {
 }
 
 
+const int numPoints = 13;
+
+// Replace these with your actual measured readings at each 5mm point
+const int rawPoints[numPoints] = {
+  0,    // 0mm
+  0,    // 5mm
+  0,    // 10mm
+  0,    // 15mm
+  0,    // 20mm
+  0,    // 25mm
+  0,    // 30mm (center)
+  0,    // 35mm
+  0,    // 40mm
+  0,    // 45mm
+  0,    // 50mm
+  0,    // 55mm
+  0     // 60mm
+};
+
+// Corresponding mapped values from -512 to +512
+const int mappedPoints[13] = {
+  -512, -427, -341, -256, -171, -85, 
+   0, 85, 171, 256, 341, 427, 512
+};
+
+int interpolate(int input, const int* inVals, const int* outVals, int numPoints) {
+  if (input <= inVals[0]) return outVals[0];
+  if (input >= inVals[numPoints-1]) return outVals[numPoints-1];
+
+  for (int i = 0; i < numPoints-1; i++) {
+    if (input >= inVals[i] && input <= inVals[i+1]) {
+      float t = (float)(input - inVals[i]) / (inVals[i+1] - inVals[i]);
+      return outVals[i] + t * (outVals[i+1] - outVals[i]);
+    }
+  }
+  return 0;
+}
+
 
 bool handleButton(int pin, int buttonNr, bool reverse, long pulse) {
   bool state;
@@ -171,7 +209,8 @@ int logfix(int input) {
   float r = pow(n,e);
   int out = r *512;
   if (c<0) out = -out;
-  return out;
+  int mappedValue = interpolate(input, rawPoints, mappedPoints, numPoints);
+  return mappedValue;
 }
 void mode1() {
   //CHJoystickButtonMatrix();
@@ -203,15 +242,15 @@ void mode1() {
   int a00 = analogRead(A0);
   int a1 = analogRead(A1);
   int a2 = analogRead(A2);
-  //Serial.print(a1);
+  Serial.print(a00);
   int a0 = (a00-512);
   
   //Serial.print(" ");
-  //Serial.print(a0);
-  //Serial.print(" ");
+  Serial.print(a0);
+  Serial.print(" ");
   a0 = logfix(a00);
   
-  //Serial.println(logfix(a00));
+  Serial.println(logfix(a00));
   //a1 = (a1-512);
   a2 = (a2-512);
   int a3 = analogRead(A3);
