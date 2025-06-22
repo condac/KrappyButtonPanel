@@ -161,29 +161,18 @@ long ERSpause = 250;
 bool falseOnce = false;
 
 
-void CHJoystickButtonMatrix() {
-  byte byte0 = digitalRead(2);
-  byte byte1 = digitalRead(3);
-  byte byte2 = digitalRead(4);
-  byte byte3 = digitalRead(5);
-
-  byte total = 0;
-  bitWrite(total, 3, byte3);
-  bitWrite(total, 2, byte2);
-  bitWrite(total, 1, byte1);
-  bitWrite(total, 0, byte0);
-
-  for (int i=0;i<16;i++) {
-    Joystick.setButton(i, 0);
-  }
-  if (total !=15) {
-    Joystick.setButton(total, 1);
-  }
-
-}
-
 bool hej;
 long timehej;
+
+int logfix(int input) {
+  int c = input - 512;
+  float n = abs(c) / 512.0;
+  float e = 2.0;
+  float r = pow(n,e);
+  int out = r *512;
+  if (c<0) out = -out;
+  return out;
+}
 void mode1() {
   //CHJoystickButtonMatrix();
   // read 2 gear shifters
@@ -211,18 +200,31 @@ void mode1() {
   //}
   
   // Read 4 analog inputs
-  int a0 = analogRead(A0);
-  a0 = (a0-512);
+  int a00 = analogRead(A0);
   int a1 = analogRead(A1);
-  a1 = (a1-512);
   int a2 = analogRead(A2);
+  //Serial.print(a1);
+  int a0 = (a00-512);
+  
+  //Serial.print(" ");
+  //Serial.print(a0);
+  //Serial.print(" ");
+  a0 = logfix(a00);
+  
+  //Serial.println(logfix(a00));
+  //a1 = (a1-512);
   a2 = (a2-512);
   int a3 = analogRead(A3);
-  a3 = (a3-512);
+  //a3 = (a3-512);
   int a4 = analogRead(A4);
-  a4 = (a4-512);
+  //a4 = (a4-512);
   //a1 = -a1;
   //a0 = -a0;
+  
+  //a0 = logfix(a00);
+  a1 = logfix(a1);
+  //a2 = logfix(a2);
+  a3 = logfix(a3);
   Joystick.setXAxis(0);
   Joystick.setYAxis(0);
   Joystick.setZAxis(a3);
