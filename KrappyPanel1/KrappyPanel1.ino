@@ -96,18 +96,18 @@ const int numPoints = 13;
 // Replace these with your actual measured readings at each 5mm point
 const int rawPoints[numPoints] = {
   0,    // 0mm
-  0,    // 5mm
-  0,    // 10mm
-  0,    // 15mm
-  0,    // 20mm
-  0,    // 25mm
-  0,    // 30mm (center)
-  0,    // 35mm
-  0,    // 40mm
-  0,    // 45mm
-  0,    // 50mm
-  0,    // 55mm
-  0     // 60mm
+  8,    // 5mm
+  32,    // 10mm
+  72,    // 15mm
+  200,    // 20mm
+  361,    // 25mm
+  512,    // 30mm (center)
+  671,    // 35mm
+  815,    // 40mm
+  945,    // 45mm
+  985,    // 50mm
+  1011,    // 55mm
+  1023     // 60mm
 };
 
 // Corresponding mapped values from -512 to +512
@@ -242,10 +242,12 @@ void mode1() {
   int a00 = analogRead(A0);
   int a1 = analogRead(A1);
   int a2 = analogRead(A2);
-  Serial.print(a00);
+  int a3 = analogRead(A3);
+  int a4 = analogRead(A4);
+  Serial.print(a4);
   int a0 = (a00-512);
   
-  //Serial.print(" ");
+  Serial.print(" ");
   Serial.print(a0);
   Serial.print(" ");
   a0 = logfix(a00);
@@ -253,9 +255,8 @@ void mode1() {
   Serial.println(logfix(a00));
   //a1 = (a1-512);
   a2 = (a2-512);
-  int a3 = analogRead(A3);
+
   //a3 = (a3-512);
-  int a4 = analogRead(A4);
   //a4 = (a4-512);
   //a1 = -a1;
   //a0 = -a0;
